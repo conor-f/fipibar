@@ -37,7 +37,7 @@ test_requirements:
 requirements:
 	$(IN_ENV) $(PYTHON) -m pip install --upgrade -r requirements.txt
 
-test: setup build test_requirements quick_test
+test: 
 	@echo "Make some tests!"
 
 quick_test:
