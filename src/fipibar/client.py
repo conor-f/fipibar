@@ -78,8 +78,7 @@ class FipibarClient():
             # )
             return msg
         except:
-            time.sleep(1)
-            return self.get_currently_playing_string()
+            return 'Can\'t find details...'
 
 
 def main():
