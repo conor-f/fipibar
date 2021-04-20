@@ -101,8 +101,19 @@ class FipibarClient():
                         ]
                     )
 
+                if self.config.get('lastfm_should_scrobble', False):
+                    self.lastfm_client.update_now_playing(
+                        artist=step['authors'],
+                        title=step['title']
+                    )
+
+                    self.lastfm_client.scrobble(
+                        artist=step['authors'],
+                        title=step['title'],
+                        timestamp=datetime.utcnow()
+                    )
+
                 self.config.set('current_track', currently_playing_string)
-                currently_playing_string = 'NEW: ' + currently_playing_string
 
             if len(currently_playing_string) > self.currently_playing_trunclen:
                 return currently_playing_string[:self.currently_playing_trunclen - 3] + '...'
