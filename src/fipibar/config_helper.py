@@ -8,7 +8,7 @@ class FipibarConfig():
         '''
         TODO:
         '''
-        self.path = os.path.expanduser("~") + "/.spotibar_config.json"
+        self.path = os.path.expanduser("~") + "/.fipibar_config.json"
         pass
 
     def get(self, key, default):

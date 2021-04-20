@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import pylast
 import requests
 import subprocess
 import time
@@ -26,6 +27,26 @@ class FipibarClient():
         self.currently_playing_trunclen = int(
             self.config.get('currently_playing_trunclen', 45)
         )
+
+        self.lastfm_client = self.get_lastfm_client()
+
+    def get_lastfm_client(self):
+        if any(
+            [
+                self.config.get('lastfm_should_heart', False),
+                self.config.get('lastfm_should_scrobble', False),
+            ]
+        ):
+            try:
+                return pylast.LastFMNetwork(
+                    api_key=self.config.get('lastfm_api_key', None),
+                    api_secret=self.config.get('lastfm_api_secret', None),
+                    username=self.config.get('lastfm_username', None),
+                    password_hash=self.config.get('lastfm_password_hash', None),
+                )
+            except Exception as e:
+                print("Please configure ~/.fipibar_config.json with last.fm details.")
+                print(e)
 
     def is_currently_playing(self):
         '''
@@ -68,14 +89,37 @@ class FipibarClient():
 
             currently_playing_string = f"{step['title']} - {step['authors']}"
 
+            if self.config.get('current_track', '') != currently_playing_string:
+                if self.config.get('should_notify', False):
+                    subprocess.check_call(
+                        [
+                            'notify-send',
+                            '-i',
+                            'applications-multimedia',
+                            'FIP radio',
+                            currently_playing_string
+                        ]
+                    )
+
+                if self.config.get('lastfm_should_scrobble', False):
+                    self.lastfm_client.update_now_playing(
+                        artist=step['authors'],
+                        title=step['title']
+                    )
+
+                    self.lastfm_client.scrobble(
+                        artist=step['authors'],
+                        title=step['title'],
+                        timestamp=datetime.utcnow()
+                    )
+
+                self.config.set('current_track', currently_playing_string)
+
             if len(currently_playing_string) > self.currently_playing_trunclen:
                 return currently_playing_string[:self.currently_playing_trunclen - 3] + '...'
             else:
                 return currently_playing_string
 
-            # subprocess.check_call(
-            #     ['notify-send', '-i', 'applications-multimedia', 'FIP radio', msg]
-            # )
             return msg
         except:
             return 'Can\'t find details...'
