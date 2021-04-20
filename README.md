@@ -27,3 +27,16 @@ exec-if = [ $(ps aux | grep fipibar_magic_constant | grep -v grep | wc -l) -eq 1
 format-underline = #bb6622
 format-padding = 2
 ```
+
+Place the following in `~/.fibibar_config.json` for Last.fm integration:
+
+```
+{
+  "should_notify": true,
+  "lastfm_should_scrobble": true,
+  "lastfm_api_key": "XXXX",
+  "lastfm_api_secret": "XXXX",
+  "lastfm_username": "XXXX",
+  "lastfm_password_hash": "XXXX"
+}
+```
