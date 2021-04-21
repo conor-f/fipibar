@@ -121,6 +121,12 @@ class FipibarClient():
         else:
             self.play()
 
+    def get_current_station_name(self):
+        return self.stations_list[self.current_station]['name']
+
+    def print_current_station_name(self):
+        print(self.get_current_station_name())
+
     def get_currently_playing_string(self):
         '''
         Returns the string displayed in Polybar for currently playing
@@ -205,6 +211,7 @@ def main():
     group.add_argument("--toggle-playback", action="store_true")
     group.add_argument("--next-station", action="store_true")
     group.add_argument("--previous-station", action="store_true")
+    group.add_argument("--print-current-station-name", action="store_true")
 
     args = parser.parse_args()
 
@@ -216,6 +223,8 @@ def main():
         fipibar_client.next_station()
     elif args.previous_station:
         fipibar_client.previous_station()
+    elif args.print_current_station_name:
+        fipibar_client.print_current_station_name()
 
 
 if __name__ == '__main__':
