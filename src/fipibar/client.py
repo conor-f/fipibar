@@ -124,6 +124,18 @@ class FipibarClient():
         except:
             return 'Can\'t find details...'
 
+    def next_station(self):
+        '''
+        Scroll to the next station in the list looping.
+        '''
+        print('go to next...')
+
+    def previous_station(self):
+        '''
+        Scroll to the previous station in the list looping.
+        '''
+        print('go to previous...')
+
 
 def main():
     fipibar_client = FipibarClient()
@@ -135,6 +147,8 @@ def main():
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--get-currently-playing", action="store_true")
     group.add_argument("--toggle-playback", action="store_true")
+    group.add_argument("--next-station", action="store_true")
+    group.add_argument("--previous-station", action="store_true")
 
     args = parser.parse_args()
 
@@ -142,6 +156,10 @@ def main():
         print(fipibar_client.get_currently_playing_string())
     elif args.toggle_playback:
         fipibar_client.toggle_playback()
+    elif args.next_station:
+        fipibar_client.next_station()
+    elif args.previous_station:
+        fipibar_client.previous_station()
 
 
 if __name__ == '__main__':
