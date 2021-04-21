@@ -1,30 +1,41 @@
 # Fipibar
 
-Fip radio plugin for Polybar with Spotify and Last FM integration from
-Spotibar.
+Fip radio plugin for Polybar with Spotify (TODO) and Last FM integration.
+
+## Screenshots/Usage:
+
+TODO!
 
 ## Installation:
-
-For now, Fip Groove is the only station accessible and there is no Spotify or
-Last FM integration.
 
 `python3 -m pip install fipibar`
 
 Installation needs the following config in your polybar config:
 
 ```
+[module/fipibar-station-name]
+type = custom/script
+exec = fipibar --print-current-station-name
+exec-if = [ $(fipibar --is-currently-playing) = "True" ]
+click-left = fipibar --next-station
+click-right = fipibar --previous-station
+scroll-up = fipibar --next-station
+scroll-down = fipibar --previous-station
+format-underline = #aa7722
+format-padding = 2
+
 [module/fipibar-toggle-playback]
 type = custom/script
-exec = echo "GRUUV:  "
+exec = echo " "
 click-left = fipibar --toggle-playback
-format-underline = #bb6622
+format-underline = #aa7722
 format-padding = 2
 
 [module/fipibar-song-details]
 type = custom/script
 exec = fipibar --get-currently-playing
-exec-if = [ $(ps aux | grep fipibar_magic_constant | grep -v grep | wc -l) -eq 1 ]
-format-underline = #bb6622
+exec-if = [ $(fipibar --is-currently-playing) = "True" ]
+format-underline = #aa7722
 format-padding = 2
 ```
 
