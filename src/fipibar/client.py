@@ -58,6 +58,11 @@ class FipibarClient():
                 'name': 'Fip Groove',
                 'details_url': 'https://api.radiofrance.fr/livemeta/pull/66',
                 'stream_url': 'https://stream.radiofrance.fr/fipgroove/fipgroove_hifi.m3u8\?id\=radiofrance'
+            },
+            {
+                'name': 'FIP',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'stream_url': 'https://stream.radiofrance.fr/fip/fip_hifi.m3u8\?id\=radiofrance'
             }
         ]
 
@@ -71,12 +76,10 @@ class FipibarClient():
             return False
 
     def play(self):
-        if not self.is_currently_playing():
-            subprocess.check_output('bash -c "exec -a ' + self.unique_fip_process_string + ' ffplay -nodisp ' + self.stations_list[self.current_station]['stream_url'] + ' > /dev/null 2>&1 &"', shell=True)
+        subprocess.check_output('bash -c "exec -a ' + self.unique_fip_process_string + ' ffplay -nodisp ' + self.stations_list[self.config.get('current_station', 0)]['stream_url'] + ' > /dev/null 2>&1 &"', shell=True)
 
     def pause(self):
-        if self.is_currently_playing():
-            subprocess.check_output('kill $(ps aux | grep ' + self.unique_fip_process_string + ' | grep -v grep | awk -e \'{printf $2}\')', shell=True)
+        subprocess.check_output('kill $(ps aux | grep ' + self.unique_fip_process_string + ' | grep -v grep | awk -e \'{printf $2}\')', shell=True)
 
     def toggle_playback(self):
         '''
@@ -94,7 +97,7 @@ class FipibarClient():
         track/artist.
         '''
         try:
-            data = requests.get(self.stations_list[self.current_station]['details_url']).json()
+            data = requests.get(self.stations_list[self.config.get('current_station', 0)]['details_url']).json()
 
             level = data['levels'][0]
             uid = level['items'][level['position']]
@@ -142,12 +145,24 @@ class FipibarClient():
         Scroll to the next station in the list looping.
         '''
         print('go to next...')
+        self.current_station += 1
+        self.current_station %= len(self.stations_list)
+        self.config.set('current_station', self.current_station)
+
+        self.pause()
+        self.play()
 
     def previous_station(self):
         '''
         Scroll to the previous station in the list looping.
         '''
         print('go to previous...')
+        self.current_station -= 1
+        self.current_station %= len(self.stations_list)
+        self.config.set('current_station', self.current_station)
+
+        self.pause()
+        self.play()
 
 
 def main():
