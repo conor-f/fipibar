@@ -19,9 +19,6 @@ class FipibarClient():
         self.config = FipibarConfig()
         self.unique_fip_process_string = 'fipibar_magic_constant'
 
-        # Thanks to Zopieux for the gist this came from:
-        # https://gist.github.com/Zopieux/ccb8d29437765083e4c80da52f2145b2
-        # URL for Fip Groove.
         self.stations_list = self.get_stations_list()
         self.current_station = self.config.get('current_station', 0)
 
@@ -133,6 +130,8 @@ class FipibarClient():
         track/artist.
         '''
         try:
+            # Thanks to Zopieux for the gist this came from:
+            # https://gist.github.com/Zopieux/ccb8d29437765083e4c80da52f2145b2
             data = requests.get(self.stations_list[self.config.get('current_station', 0)]['details_url']).json()
 
             level = data['levels'][0]
@@ -148,7 +147,7 @@ class FipibarClient():
                             'notify-send',
                             '-i',
                             'applications-multimedia',
-                            'FIP radio',
+                            self.get_current_station_name(),
                             currently_playing_string
                         ]
                     )
