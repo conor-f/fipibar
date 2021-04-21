@@ -60,38 +60,38 @@ class FipibarClient():
                 'stream_url': 'https://stream.radiofrance.fr/fipgroove/fipgroove_hifi.m3u8\?id\=radiofrance'
             },
             {
-                'name': 'FIP',
+                'name': 'FIP Radio',
                 'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
                 'stream_url': 'https://stream.radiofrance.fr/fip/fip_hifi.m3u8\?id\=radiofrance'
             },
             {
                 'name': 'FIP Rock',
-                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/64',
                 'stream_url': 'https://stream.radiofrance.fr/fiprock/fiprock_hifi.m3u8\?id\=radiofrance'
             },
             {
                 'name': 'FIP Jazz',
-                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/65',
                 'stream_url': 'https://stream.radiofrance.fr/fipjazz/fipjazz_hifi.m3u8\?id\=radiofrance'
             },
             {
                 'name': 'FIP World',
-                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/69',
                 'stream_url': 'https://stream.radiofrance.fr/fipworld/fipworld_hifi.m3u8\?id\=radiofrance'
             },
             {
                 'name': 'FIP Nouveautes',
-                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/70',
                 'stream_url': 'https://stream.radiofrance.fr/fipnouveautes/fipnouveautes_hifi.m3u8\?id\=radiofrance'
             },
             {
                 'name': 'FIP Reggae',
-                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/71',
                 'stream_url': 'https://stream.radiofrance.fr/fipreggae/fipreggae_hifi.m3u8\?id\=radiofrance'
             },
             {
                 'name': 'FIP Electro',
-                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/74',
                 'stream_url': 'https://stream.radiofrance.fr/fipelectro/fipelectro_hifi.m3u8\?id\=radiofrance'
             },
         ]
