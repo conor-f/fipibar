@@ -22,7 +22,8 @@ class FipibarClient():
         # Thanks to Zopieux for the gist this came from:
         # https://gist.github.com/Zopieux/ccb8d29437765083e4c80da52f2145b2
         # URL for Fip Groove.
-        self.details_url = 'https://api.radiofrance.fr/livemeta/pull/66'
+        self.stations_list = self.get_stations_list()
+        self.current_station = self.config.get('current_station', 0)
 
         self.currently_playing_trunclen = int(
             self.config.get('currently_playing_trunclen', 45)
@@ -48,6 +49,18 @@ class FipibarClient():
                 print("Please configure ~/.fipibar_config.json with last.fm details.")
                 print(e)
 
+    def get_stations_list(self):
+        '''
+        Returns a list of dicts definining stations.
+        '''
+        return [
+            {
+                'name': 'Fip Groove',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/66',
+                'stream_url': 'https://stream.radiofrance.fr/fipgroove/fipgroove_hifi.m3u8\?id\=radiofrance'
+            }
+        ]
+
     def is_currently_playing(self):
         '''
         Returns True if there is a currently playing song, False otherwise.
@@ -59,7 +72,7 @@ class FipibarClient():
 
     def play(self):
         if not self.is_currently_playing():
-            subprocess.check_output('bash -c "exec -a ' + self.unique_fip_process_string + ' ffplay -nodisp https://stream.radiofrance.fr/fipgroove/fipgroove_hifi.m3u8\?id\=radiofrance > /dev/null 2>&1 &"', shell=True)
+            subprocess.check_output('bash -c "exec -a ' + self.unique_fip_process_string + ' ffplay -nodisp ' + self.stations_list[self.current_station]['stream_url'] + ' > /dev/null 2>&1 &"', shell=True)
 
     def pause(self):
         if self.is_currently_playing():
@@ -81,7 +94,7 @@ class FipibarClient():
         track/artist.
         '''
         try:
-            data = requests.get(self.details_url).json()
+            data = requests.get(self.stations_list[self.current_station]['details_url']).json()
 
             level = data['levels'][0]
             uid = level['items'][level['position']]
