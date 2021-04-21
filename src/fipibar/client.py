@@ -55,7 +55,7 @@ class FipibarClient():
         '''
         return [
             {
-                'name': 'Fip Groove',
+                'name': 'FIP Groove',
                 'details_url': 'https://api.radiofrance.fr/livemeta/pull/66',
                 'stream_url': 'https://stream.radiofrance.fr/fipgroove/fipgroove_hifi.m3u8\?id\=radiofrance'
             },
@@ -63,7 +63,37 @@ class FipibarClient():
                 'name': 'FIP',
                 'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
                 'stream_url': 'https://stream.radiofrance.fr/fip/fip_hifi.m3u8\?id\=radiofrance'
-            }
+            },
+            {
+                'name': 'FIP Rock',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'stream_url': 'https://stream.radiofrance.fr/fiprock/fiprock_hifi.m3u8\?id\=radiofrance'
+            },
+            {
+                'name': 'FIP Jazz',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'stream_url': 'https://stream.radiofrance.fr/fipjazz/fipjazz_hifi.m3u8\?id\=radiofrance'
+            },
+            {
+                'name': 'FIP World',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'stream_url': 'https://stream.radiofrance.fr/fipworld/fipworld_hifi.m3u8\?id\=radiofrance'
+            },
+            {
+                'name': 'FIP Nouveautes',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'stream_url': 'https://stream.radiofrance.fr/fipnouveautes/fipnouveautes_hifi.m3u8\?id\=radiofrance'
+            },
+            {
+                'name': 'FIP Reggae',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'stream_url': 'https://stream.radiofrance.fr/fipreggae/fipreggae_hifi.m3u8\?id\=radiofrance'
+            },
+            {
+                'name': 'FIP Electro',
+                'details_url': 'https://api.radiofrance.fr/livemeta/pull/7',
+                'stream_url': 'https://stream.radiofrance.fr/fipelectro/fipelectro_hifi.m3u8\?id\=radiofrance'
+            },
         ]
 
     def is_currently_playing(self):
@@ -144,7 +174,6 @@ class FipibarClient():
         '''
         Scroll to the next station in the list looping.
         '''
-        print('go to next...')
         self.current_station += 1
         self.current_station %= len(self.stations_list)
         self.config.set('current_station', self.current_station)
@@ -156,7 +185,6 @@ class FipibarClient():
         '''
         Scroll to the previous station in the list looping.
         '''
-        print('go to previous...')
         self.current_station -= 1
         self.current_station %= len(self.stations_list)
         self.config.set('current_station', self.current_station)
