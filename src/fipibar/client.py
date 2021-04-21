@@ -211,6 +211,7 @@ def main():
     group.add_argument("--next-station", action="store_true")
     group.add_argument("--previous-station", action="store_true")
     group.add_argument("--print-current-station-name", action="store_true")
+    group.add_argument("--is-currently-playing", action="store_true")
 
     args = parser.parse_args()
 
@@ -224,6 +225,8 @@ def main():
         fipibar_client.previous_station()
     elif args.print_current_station_name:
         fipibar_client.print_current_station_name()
+    elif args.is_currently_playing:
+        print(fipibar_client.is_currently_playing())
 
 
 if __name__ == '__main__':
