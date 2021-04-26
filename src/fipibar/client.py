@@ -7,6 +7,7 @@ import subprocess
 import time
 
 from .config_helper import FipibarConfig
+from .popups import ConfigPopup
 from datetime import datetime
 
 
@@ -212,6 +213,7 @@ def main():
     group.add_argument("--previous-station", action="store_true")
     group.add_argument("--print-current-station-name", action="store_true")
     group.add_argument("--is-currently-playing", action="store_true")
+    group.add_argument("--config-popup", action="store_true")
 
     args = parser.parse_args()
 
@@ -227,6 +229,8 @@ def main():
         fipibar_client.print_current_station_name()
     elif args.is_currently_playing:
         print(fipibar_client.is_currently_playing())
+    elif args.config_popup:
+        ConfigPopup()
 
 
 if __name__ == '__main__':

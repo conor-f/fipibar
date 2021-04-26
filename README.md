@@ -28,6 +28,7 @@ format-padding = 2
 type = custom/script
 exec = echo " "
 click-left = fipibar --toggle-playback
+click-right = fipibar --config-popup
 format-underline = #aa7722
 format-padding = 2
 

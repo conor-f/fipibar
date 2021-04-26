@@ -5,13 +5,13 @@ from setuptools import (
 
 INSTALL_REQUIRES = [
     'pylast',
-    'spotibar'
+    'spotipy'
 ]
 
 setup(
     name='fipibar',
     description='Fip radio plugin for Polybar',
-    version='0.0.4',
+    version='0.0.5',
     url='https://github.com/conor-f/fipibar',
     python_requires='>=3.6',
     packages=find_packages('src'),
