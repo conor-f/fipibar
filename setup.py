@@ -5,7 +5,7 @@ from setuptools import (
 
 INSTALL_REQUIRES = [
     'pylast',
-    'spotipy'
+    'spotibar'
 ]
 
 setup(

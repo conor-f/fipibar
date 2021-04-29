@@ -1,2 +1,2 @@
 pylast
-spotipy
+spotibar
