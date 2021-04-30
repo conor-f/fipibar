@@ -7,7 +7,10 @@ import subprocess
 import time
 
 from .config_helper import FipibarConfig
+from .popups import ConfigPopup
 from datetime import datetime
+
+from spotibar.client import SpotibarClient
 
 
 class FipibarClient():
@@ -17,6 +20,7 @@ class FipibarClient():
         TODO: Add args/kwargs here.
         '''
         self.config = FipibarConfig()
+        self.spotibar_client = SpotibarClient(config_file='.fipibar_config.json')
         self.unique_fip_process_string = 'fipibar_magic_constant'
 
         self.stations_list = self.get_stations_list()
@@ -138,9 +142,19 @@ class FipibarClient():
             uid = level['items'][level['position']]
             step = data['steps'][uid]
 
-            currently_playing_string = f"{step['title']} - {step['authors']}"
+            current_artist_name = step['authors']
+            current_track_name = step['title']
+            currently_playing_string = f"{current_track_name} - {current_artist_name}"
 
-            if self.config.get('current_track', '') != currently_playing_string:
+            if any(
+                [
+                    self.config.get('current_track_name', '') != current_track_name,
+                    self.config.get('current_artist_name', '') != current_artist_name
+                ]
+            ):
+                self.config.set('current_track_name', current_track_name)
+                self.config.set('current_artist_name', current_artist_name)
+
                 if self.config.get('should_notify', False):
                     subprocess.check_call(
                         [
@@ -154,17 +168,15 @@ class FipibarClient():
 
                 if self.config.get('lastfm_should_scrobble', False):
                     self.lastfm_client.update_now_playing(
-                        artist=step['authors'],
-                        title=step['title']
+                        artist=current_artist_name,
+                        title=current_track_name
                     )
 
                     self.lastfm_client.scrobble(
-                        artist=step['authors'],
-                        title=step['title'],
+                        artist=current_artist_name,
+                        title=current_track_name,
                         timestamp=datetime.utcnow()
                     )
-
-                self.config.set('current_track', currently_playing_string)
 
             if len(currently_playing_string) > self.currently_playing_trunclen:
                 return currently_playing_string[:self.currently_playing_trunclen - 3] + '...'
@@ -197,6 +209,44 @@ class FipibarClient():
         self.pause()
         self.play()
 
+    def like_track(self):
+        '''
+        Like this track on Last.fm and add to Spotify playlist as needed.
+        '''
+        current_station = self.get_current_station_name()
+        current_artist_name = self.config.get('current_artist_name', '')
+        current_track_name = self.config.get('current_track_name', '')
+
+        if self.config.get('should_heart_on_lastfm', False):
+            try:
+                self.lastfm_client.get_track(
+                    current_artist_name,
+                    current_track_name
+                ).love()
+            except Exception as e:
+                print("Failed to heart track...")
+                print(e)
+
+        if self.config.get('should_add_to_spotify', False):
+            try:
+                track_id = self.spotibar_client.get_track_id_from_name(
+                    current_artist_name,
+                    current_track_name
+                )
+
+                playlist_id = self.spotibar_client.get_playlist_id_from_name(
+                    '~F~I~P~',
+                    create_if_empty=True
+                )
+
+                self.spotibar_client.add_track_to_playlist(
+                    track_id,
+                    playlist_id
+                )
+            except Exception as e:
+                print("Failed to add track to Spotify...")
+                print(e)
+
 
 def main():
     fipibar_client = FipibarClient()
@@ -212,6 +262,8 @@ def main():
     group.add_argument("--previous-station", action="store_true")
     group.add_argument("--print-current-station-name", action="store_true")
     group.add_argument("--is-currently-playing", action="store_true")
+    group.add_argument("--config-popup", action="store_true")
+    group.add_argument("--like-track", action="store_true")
 
     args = parser.parse_args()
 
@@ -227,6 +279,10 @@ def main():
         fipibar_client.print_current_station_name()
     elif args.is_currently_playing:
         print(fipibar_client.is_currently_playing())
+    elif args.config_popup:
+        ConfigPopup()
+    elif args.like_track:
+        fipibar_client.like_track()
 
 
 if __name__ == '__main__':
