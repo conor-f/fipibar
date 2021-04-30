@@ -11,7 +11,7 @@ INSTALL_REQUIRES = [
 setup(
     name='fipibar',
     description='Fip radio plugin for Polybar',
-    version='0.0.5',
+    version='0.0.6',
     url='https://github.com/conor-f/fipibar',
     python_requires='>=3.6',
     packages=find_packages('src'),
