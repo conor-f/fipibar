@@ -148,12 +148,12 @@ class FipibarClient():
 
             if any(
                 [
-                    self.config.get('current_track', '') != current_track_name,
-                    self.config.get('current_artist', '') != current_artist_name
+                    self.config.get('current_track_name', '') != current_track_name,
+                    self.config.get('current_artist_name', '') != current_artist_name
                 ]
             ):
-                self.config.set('current_track', current_track_name)
-                self.config.set('current_artist', current_artist_name)
+                self.config.set('current_track_name', current_track_name)
+                self.config.set('current_artist_name', current_artist_name)
 
                 if self.config.get('should_notify', False):
                     subprocess.check_call(
@@ -214,14 +214,37 @@ class FipibarClient():
         Like this track on Last.fm and add to Spotify playlist as needed.
         '''
         current_station = self.get_current_station_name()
-        current_artist = self.config.get('current_artist', '')
-        current_track = self.config.get('current_track', '')
+        current_artist_name = self.config.get('current_artist_name', '')
+        current_track_name = self.config.get('current_track_name', '')
 
         if self.config.get('should_heart_on_lastfm', False):
             try:
-                self.lastfm_client.get_track(current_artist, current_track).love()
+                self.lastfm_client.get_track(
+                    current_artist_name,
+                    current_track_name
+                ).love()
             except Exception as e:
                 print("Failed to heart track...")
+                print(e)
+
+        if self.config.get('should_add_to_spotify', False):
+            try:
+                track_id = self.spotibar_client.get_track_id_from_name(
+                    current_artist_name,
+                    current_track_name
+                )
+
+                playlist_id = self.spotibar_client.get_playlist_id_from_name(
+                    '~F~I~P~',
+                    create_if_empty=True
+                )
+
+                self.spotibar_client.add_track_to_playlist(
+                    track_id,
+                    playlist_id
+                )
+            except Exception as e:
+                print("Failed to add track to Spotify...")
                 print(e)
 
 
