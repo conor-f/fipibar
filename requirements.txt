@@ -1,2 +1,2 @@
 pylast
-spotibar
+spotibar>=0.2.4
