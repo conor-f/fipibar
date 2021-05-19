@@ -240,8 +240,8 @@ class FipibarClient():
                 )
 
                 self.spotibar_client.add_track_to_playlist(
-                    track_id,
-                    playlist_id
+                    playlist_id,
+                    track_id
                 )
             except Exception as e:
                 print("Failed to add track to Spotify...")
