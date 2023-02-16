@@ -15,12 +15,11 @@ from spotibar.client import SpotibarClient
 
 class FipibarClient():
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         '''
         TODO: Add args/kwargs here.
         '''
         self.config = FipibarConfig()
-        self.spotibar_client = SpotibarClient(config_file='.fipibar_config.json')
         self.unique_fip_process_string = 'fipibar_magic_constant'
 
         self.stations_list = self.get_stations_list()
@@ -30,7 +29,6 @@ class FipibarClient():
             self.config.get('currently_playing_trunclen', 45)
         )
 
-        self.lastfm_client = self.get_lastfm_client()
 
     def get_lastfm_client(self):
         if any(
@@ -167,6 +165,8 @@ class FipibarClient():
                     )
 
                 if self.config.get('lastfm_should_scrobble', False):
+                    self.lastfm_client = self.get_lastfm_client()
+
                     self.lastfm_client.update_now_playing(
                         artist=current_artist_name,
                         title=current_track_name
@@ -219,6 +219,8 @@ class FipibarClient():
 
         if self.config.get('should_heart_on_lastfm', False):
             try:
+                self.lastfm_client = self.get_lastfm_client()
+
                 self.lastfm_client.get_track(
                     current_artist_name,
                     current_track_name
@@ -229,6 +231,10 @@ class FipibarClient():
 
         if self.config.get('should_add_to_spotify', False):
             try:
+                self.spotibar_client = SpotibarClient(
+                    config_file='.fipibar_config.json'
+                )
+
                 track_id = self.spotibar_client.get_track_id_from_name(
                     current_artist_name,
                     current_track_name
